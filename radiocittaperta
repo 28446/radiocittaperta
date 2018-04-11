@@ -1,0 +1,335 @@
+#!/bin/bash
+
+#   radiocittaperta - bash script per l'ascolta di radiocittaperta.it
+#   Copyright (C) 2018  Felipe S. <felipesalva@tiscali.com>
+
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+RCA="http://94.23.66.155/proxy/radiocit?mp=/stream"
+
+MSG0="Per spengere la radio lancia nuovamente $(basename $0)."
+MSG1="Lo streaming non funziona, verifica su www.radiocittaperta.it. Se non funziona potresti segnalarlo alla radio! :-)"
+MSG2="Sei offline!"
+MSG3="$(basename $0) è terminato inaspettatamente.\rElimino il pidfile, rilancia lo script per ascoltare."
+
+MSG0n="Radiocittaperta★it: Per spengere la radio lancia nuovamente $(basename $0)."
+MSG1n="Radiocittaperta★it: Lo streaming non funziona, verifica su www.radiocittaperta.it. Se non funziona, potresti segnalarlo alla radio! :-)"
+MSG2n="Radiocittaperta★it: Sei offline!"
+MSG3n="Radiocittaperta★it: $(basename $0) è terminato inaspettatamente. Elimino il pidfile, rilancia lo script per ascoltare."
+
+RPLAY="$1"
+GTTY="$(tty | cut -d'/' -f3)"
+
+
+mostra_info(){
+apps=(notify-send nc wget)
+
+declare -A found
+
+for app in "${apps[@]}"; do
+    if command -v "$app" >/dev/null; then
+	found[$app]=$(echo -e '\e[1m\e[32mSÌ\e[0m')
+    else 
+	found[$app]=$(echo -e '\e[1m\e[31mNO\e[0m')
+    fi
+done
+
+clear
+echo
+echo -e "\t\t$(basename $0) - bash script per l'ascolto di\n\t\t\t\040\040\040\040\040\e[40m\e[0m\e[1mradiocittaperta\033[31m★\e[0m\e[1mit\n\t\t\040\040\040\040\040\040\040\e[0m\e[3mLa radio libera e indipendente"
+echo -e "\e[0m"
+echo
+cat <<EOF
+
+    Questo script non fa altro che utilizzare software già installato,
+    o eventualmente da installere, per ascoltare lo streaming (flusso audio
+    dalla rete) di www.radiocittaperta.it.
+
+    Lo script si occupa quindi di aprire l'URL dello streaming con un PLAYER
+    per ascoltare la radio, mantendendo il PLAYER in questione in background,
+    senza finestra o icona nella barra.
+
+    I PLAYER selezionati sono stati scelti in base ad un criterio di integraz-
+    ione con i vari DE (KDE, GNOME, XFCE, LXDE, UNITY, ecc ecc) e funzionalità
+    disponibili (es. la capacità di intepretare correttamente i metadati cont-
+    enuti in un flusso streaming).
+
+    Se stai provando questo script su CentOS, Scientific Linux o un altra der-
+    ivata Red Hat e non senti audio, potresti non avere installati i codec per
+    mp3. Per la risoluzione di questo problema ti invito a consultare la rete.
+    
+    Per mostrare le notifiche sul desktop ho scelto di utilizzare notify-send.
+    L'ho scelto perché utilizzato e/o utilizzabile in tutti i DE e perché ris-
+    ulta installato di base su molte distribuzioni, fatta eccezione per OpenSuSe,
+    dove è comunque disponibile nel pacchetto libnotify-tools.
+
+    notify-send è essenziale per il funzionamento dello script in un DE.
+
+    Per verificare la presenza di una connessione internet e la disponibilità
+    del flusso audio da Radiocittaperta★it utilizzo nc (netcat) o wget come
+    fallback.
+
+    nc o wget sono fondamentali per il funzionamento dello script.
+
+    --------------------------------------------------------------------------
+    APPLICAZIONE:		INSTALLATA:
+
+    notify-send			${found[notify-send]}    
+    nc				${found[nc]}
+    wget			${found[wget]}
+    --------------------------------------------------------------------------
+
+    Per verificare quali PLAYER hai installato e/o quali dovrai installare e le
+    relative opzioni per utilizzarli:
+
+    $(basename $0) -h		Mostra utilizzo
+
+EOF
+}
+ 
+mostra_info_nox(){
+apps=(nc wget)
+
+declare -A found
+
+for app in "${apps[@]}"; do
+    if command -v "$app" >/dev/null; then
+	found[$app]=$(echo -e '\e[1m\e[32mSÌ\e[0m')
+    else 
+	found[$app]=$(echo -e '\e[1m\e[31mNO\e[0m')
+    fi
+done
+
+clear
+echo
+echo -e "\t\t$(basename $0) - bash script per l'ascolto di\n\t\t\t\040\040\040\040\040\e[40m\e[0m\e[1mradiocittaperta\033[31m★\e[0m\e[1mit\n\t\t\040\040\040\040\040\040\040\e[0m\e[3mLa radio libera e indipendente"
+echo -e "\e[0m"
+echo
+echo -e "\040\040\040\040\e[31mStai utilizzando $(basename $0) da un terminale, la selezione dei PLAYER\n\040\040\040\040utilizzabili (vedi utilizzo) varierà di conseguenza (es. dragonplayer non\n\040\040\040\040può funzionare su terminale, perché richiede un server grafico).\n"
+echo -e "\e[0m"
+cat <<EOF
+
+    Questo script non fa altro che utilizzare software già installato, o eve-
+    ntualmente da installere, per ascoltare lo streaming (flusso audio dalla
+    rete) di www.radiocittaperta.it.
+
+    Lo script si occupa quindi di aprire l'URL dello streaming con un PLAYER
+    per ascoltare la radio, mantendendo il PLAYER in questione in background,
+    senza finestra o icona nella barra.
+    
+    Se stai provando questo script su CentOS, Scientific Linux o un altra der-
+    ivata Red Hat e non senti audio, potresti non avere installati i codec per
+    mp3. Per la risoluzione di questo problema ti invito a consultare la rete.
+
+    Per verificare la presenza di una connessione internet e la disponibilità
+    del flusso audio da Radiocittaperta★it utilizzo nc (netcat) o wget come
+    fallback.
+
+    nc o wget sono fondamentali per il funzionamento dello script.
+    
+    --------------------------------------------------------------------------
+    APPLICAZIONE:		INSTALLATA:
+
+    nc				${found[nc]}
+    wget			${found[wget]}
+    --------------------------------------------------------------------------
+
+    Per verificare quali PLAYER hai installato e/o quali dovrai installare e le
+    relative opzioni per utilizzarli:
+
+    $(basename $0) -h		Mostra utilizzo
+
+
+
+EOF
+}
+
+mostra_help(){
+apps=(dragon mpv cvlc rhythmbox totem-audio-preview radiotray)
+
+declare -A found
+
+for app in "${apps[@]}"; do
+    if command -v "$app" >/dev/null; then
+	found[$app]=$(echo -e '\e[1m\e[32mSÌ\e[0m')
+    else 
+	found[$app]=$(echo -e '\e[1m\e[31mNO\e[0m')
+    fi
+done
+
+
+cat<<EOF
+
+    Devi installare almeno uno di questi software per ascoltare la radio.
+    Se ne hai già uno o più installati puoi procedere con:
+
+    $(basename $0) [OPZIONE]
+
+    --------------------------------------------------------------------------
+    OPZIONE:		DESCRIZIONE:			INSTALLATO:
+    -dp	   		Utilizza Dragonplayer	        ${found[dragon]}
+    -mp			Utilizza mpv			${found[mpv]}
+    -vp	   		Utilizza (c)VLC		 	${found[cvlc]}
+    -rp     		Utilizza Rhythmbox		${found[rhythmbox]}
+    -tp     		Utilizza totem-audio-preview 	${found[totem-audio-preview]}
+    -rtp    		Utilizza radiotray		${found[radiotray]}
+    --------------------------------------------------------------------------
+
+    
+
+EOF
+}
+
+mostra_help_nox(){
+apps=(mpg123 mpv totem-audio-preview)
+
+declare -A found
+
+for app in "${apps[@]}"; do
+    if command -v "$app" >/dev/null; then
+	found[$app]=$(echo -e '\e[1m\e[32mSÌ\e[0m')
+    else
+	found[$app]=$(echo -e '\e[1m\e[31mNO\e[0m')
+    fi
+done
+
+cat<<EOF
+
+    Devi installare almeno uno di questi software per ascoltare la radio.
+    Se ne hai già uno o più installati puoi procedere con:
+
+    $(basename $0) [OPZIONE]
+
+    --------------------------------------------------------------------------    
+    OPZIONE:	DESCRIZIONE:			INSTALLATO:
+    -mpg        Utilizza mpg123			${found[mpg123]}
+    -mp	        Utilizza mpv			${found[mpv]}
+    -tp         Utilizza totem-audio-preview	${found[totem-audio-preview]}
+    --------------------------------------------------------------------------
+EOF
+}
+
+cpidf(){
+    if [ "$RPLAY" = "-dp" ]; then
+	sleep 2 && pidof dragon >/tmp/rca.pid
+    else
+	echo  "$!" > /tmp/rca.pid
+    fi
+}
+
+suona_rca(){
+    case "$RPLAY" in
+    -vp) cvlc --play-and-exit --quiet --osd --daemon --pidfile /tmp/rca.pid "$RCA" &>/dev/null && sleep 3; $msger $eval "$MSG0";;
+    -dp) kstart5 --iconify --skiptaskbar dragon "$RCA" &>/dev/null & cpidf && sleep 3; $msger $eval "$MSG0";;
+    -mp) mpv --quiet --display-tags=icy-title "$RCA">/tmp/titles & cpidf && sleep 3; $msger $eval "$MSG0"; mpv_title;;
+    -rp) rhythmbox "$RCA" &>/dev/null & cpidf && sleep 3; $msger $eval "$MSG0";;
+    -tp) totem-audio-preview "$RCA" &> /dev/null & cpidf && sleep 3; $msger $eval "$MSG0";;
+    -rtp) radiotray "$RCA" &>/dev/null & cpidf && sleep 3; $msger $eval "$MSG0";;
+    -h) mostra_help;;
+    *) mostra_info;
+       exit 1
+    esac
+}
+
+suona_rca_nox(){
+    case "$RPLAY" in
+    -mpg) mpg123 "$RCA" &>/dev/null & cpidf && "$msger" "$MSG0n";;
+    -mp) mpv --no-video --quiet "$RCA" &>/dev/null & cpidf && "$msger" "$MSG0n";;
+    -tp) totem-audio-preview "$RCA" &>/dev/null & cpidf && "$msger" "$MSG0n";;
+    -h) mostra_help_nox;;
+    *) mostra_info_nox;
+       exit 1
+    esac
+}
+
+mpv_title(){
+PIDP="$(cat /tmp/rca.pid 2>/dev/null)"  
+IFS=
+read -r -a titla < <(tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2)
+
+while [ -d /proc/"$PIDP" ]
+do
+    sleep 3 && titlf=`tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2`
+    if [ "$titla" != "$titlf" -a -n "$titlf" ]; then
+	notify-send -i info "Radiocittaperta★it:" "$titlf"; read -r -a titla < <(tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2)
+    fi
+done &
+}
+
+env_conf(){
+    case "$GTTY" in
+	tty*) suona_rca_nox;;
+	*) suona_rca
+    esac
+}
+
+vpid(){
+PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
+    if [ ! -e /tmp/rca.pid ]; then
+	env_conf
+    elif [ -e /tmp/rca.pid ]; then
+	if [ ! -d /proc/"$PIDP" ]; then
+	    rm -fr /tmp/rca.pid && $msger $eval "$MSG3"; else
+	    kill -9 "$PIDP" && rm -f /tmp/rca.pid /tmp/titles &>/dev/null #&& kill -9 -$(ps -C radiocittaperta -o pgid=)&>/dev/null
+	fi
+    fi
+}
+
+wnchk(){
+    wget -q --spider www.google.it
+    online=$?
+    if [ "$online" -eq 0 ]; then
+	wnchk_strm
+    else
+	sleep 3; $msger $eval "$MSG2";
+	exit 1
+    fi
+}
+
+wnchk_strm(){
+    wget -q --spider 94.23.66.155
+    strmok=$?
+    if [ "$strmok" -eq 0 ]; then
+	vpid
+    else
+	$msger $eval "$MSG1";
+	exit 1
+    fi
+}
+
+nchk_strm(){
+nc -z 94.23.66.155 80 2>/dev/null
+    strmok=$?
+    if [ "$strmok" -eq 0 ]; then
+	vpid
+    else
+	$msger $eval "$MSG1";
+	exit 1
+    fi
+}
+
+netto(){
+	nc -z dns2.interbusiness.it 53 2>/dev/null
+	netto="$?"    
+	if [ "$netto" -ne 0 ]; then
+	    wnchk; else
+	    nchk_strm
+	fi
+}
+
+case "$GTTY" in
+    tty[0-8]) MSG0=$MSG0n; MSG1=$MSG1n; MSG2=$MSG2n; MSG3=$MSG3n && msger=echo; netto;;
+    *) msger="notify-send -i info Radiocittaperta★it"; netto
+esac
