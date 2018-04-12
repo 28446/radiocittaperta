@@ -18,7 +18,7 @@ I PLAYER selezionati sono stati scelti in base ad un criterio di integrazione co
 
 Per una migliore esperienza consiglio di utilizzare [Dragonplayer](https://www.kde.org/applications/multimedia/dragonplayer/) su KDE e [mpv](https://mpv.io/) sui restanti DE.
 
-N.B Io uso [Debian](https://www.kde.org/applications/multimedia/dragonplayer/) Stretch, con KDE 5.8.6. Non ho avuto modo di provare con versioni precedenti.
+N.B Io uso [Debian](https://www.debian.org/) Stretch, con KDE 5.8.6. Non ho avuto modo di provare con versioni precedenti.
 
 Dragonplayer su KDE visualizza correttamente i metadati presenti nel flusso mp3, inserendo il titolo della canzone attualmente in onda in un menù con il simbolo "Play" nella barra delle notifiche.
 
