@@ -1,5 +1,11 @@
 # radiocittaperta - bash script per l'ascolto in streaming di radiocittaperta★it - _La radio libera ed indipendente_
 
+![notifiche radiocittaperta](https://b2aeaa58a57a200320db-8b65b95250e902c437b256b5abf3eac7.ssl.cf5.rackcdn.com/media_entries/17147/radiocittaperta.gif "notifiche radiocittaperta")
+
+![radiocittaperta con dragonplayer](https://b2aeaa58a57a200320db-8b65b95250e902c437b256b5abf3eac7.ssl.cf5.rackcdn.com/media_entries/17148/Screenshot_20180412_182251.png "radiocittaperta kde")
+
+![radiocittaperta tty](https://b2aeaa58a57a200320db-8b65b95250e902c437b256b5abf3eac7.ssl.cf5.rackcdn.com/media_entries/17149/screen.png "radiocittaperta da terminale")
+
 Ho creato questo script per necessità e per diletto. La necessità di accedere allo streaming di radiocittaperta.it dal mio computer in modo semplice. Il diletto nel cimentarmi nella scrittura dello stesso.
 
 Questo script non fa altro che utilizzare software già installato, o eventualmente da installere, per ascoltare lo streaming (flusso audio dalla rete) di www.radiocittaperta.it. Non installa automaticamente il software di cui ha bisogno, si limita a farti presente che ciò di cui ha bisogno è installato o meno. In generale tutto il software di cui necessita è disponibile nei repository uffuciali di quasi tutte le distribuzioni, fatta eccezione per Red Hat e derivate.
