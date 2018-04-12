@@ -14,10 +14,8 @@ senza finestra o icona nella barra.
 
 È sufficente quindi lanciare radiocittaperta [OPZIONE] per ascoltare la radio, per interrompere l'ascolto basta lanciare nuovamente lo script. Volendo lo si può inserire nel menù delle applicazioni, creandogli un lanciatore apposito.
 
-I PLAYER selezionati sono stati scelti in base ad un criterio di integraz-
-ione con i vari DE (KDE, GNOME, XFCE, LXDE, UNITY, ecc ecc) e funzionalità
-disponibili (es. la capacità di interpretare correttamente i metadati cont-
-enuti in un flusso streaming).
+I PLAYER selezionati sono stati scelti in base ad un criterio di integrazione con i vari DE (KDE, GNOME, XFCE, LXDE, UNITY, ecc ecc) e funzionalità
+disponibili (es. la capacità di interpretare correttamente i metadati contenuti in un flusso streaming).
 
 Per una migliore esperienza consiglio di utilizzare [Dragonplayer](https://www.kde.org/applications/multimedia/dragonplayer/) 
 su KDE e [mpv](https://mpv.io/) sui restanti DE.
@@ -40,7 +38,7 @@ delle informazioni potrebbero creare confusione.
 
 Mpv e Dragonplayer sono gli unici software a mostrare le meta informazioni presenti
 nel flusso mp3. Tuttavia, oltre ad mpv e Dragonplayer, lo script può funzionare con altri PLAYER, inseriti
-in una lista, dispnibile lancianto _radiocittaperta -h_. In talune circostanze si potrebbe apprezzare il fatto che, per esempio, mpg123 sia più "leggero" degli stessi dragonplayer e mpv.
+in una lista, dispnibile lancianto _radiocittaperta -h_. In talune circostanze si potrebbe apprezzare il fatto che, per esempio, [mpg123](https://mpg123.de/) sia più "leggero" degli stessi dragonplayer e mpv.
 
 Buon ascolto!
 

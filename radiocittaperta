@@ -25,7 +25,7 @@ MSG2="Sei offline!"
 MSG3="$(basename $0) è terminato inaspettatamente.\rElimino il pidfile, rilancia lo script per ascoltare."
 
 MSG0n="Radiocittaperta★it: Per spengere la radio lancia nuovamente $(basename $0)."
-MSG1n="Radiocittaperta★it: Lo streaming non funziona, verifica su www.radiocittaperta.it. Se non funziona, potresti segnalarlo alla radio! :-)"
+MSG1n="Radiocittaperta★it: Lo streaming non funziona, verifica su www.radiocittaperta.it. Se non funziona potresti segnalarlo alla radio! :-)"
 MSG2n="Radiocittaperta★it: Sei offline!"
 MSG3n="Radiocittaperta★it: $(basename $0) è terminato inaspettatamente. Elimino il pidfile, rilancia lo script per ascoltare."
 
@@ -282,7 +282,7 @@ PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
     elif [ -e /tmp/rca.pid ]; then
 	if [ ! -d /proc/"$PIDP" ]; then
 	    rm -fr /tmp/rca.pid && $msger $eval "$MSG3"; else
-	    kill -9 "$PIDP" && rm -f /tmp/rca.pid /tmp/titles &>/dev/null #&& kill -9 -$(ps -C radiocittaperta -o pgid=)&>/dev/null
+	    kill -9 "$PIDP" && rm -f /tmp/rca.pid /tmp/titles &>/dev/null
 	fi
     fi
 }
