@@ -275,18 +275,6 @@ env_conf(){
     esac
 }
 
-vpid(){
-PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
-    if [ ! -e /tmp/rca.pid ]; then
-	env_conf
-    elif [ -e /tmp/rca.pid ]; then
-	if [ ! -d /proc/"$PIDP" ]; then
-	    rm -fr /tmp/rca.pid && $msger $eval "$MSG3"; else
-	    kill -9 "$PIDP" && rm -f /tmp/rca.pid /tmp/titles &>/dev/null
-	fi
-    fi
-}
-
 wnchk(){
     wget -q --spider www.google.it
     online=$?
@@ -302,7 +290,7 @@ wnchk_strm(){
     wget -q --spider 94.23.66.155
     strmok=$?
     if [ "$strmok" -eq 0 ]; then
-	vpid
+	env_conf
     else
 	$msger $eval "$MSG1";
 	exit 1
@@ -313,7 +301,7 @@ nchk_strm(){
 nc -z 94.23.66.155 80 2>/dev/null
     strmok=$?
     if [ "$strmok" -eq 0 ]; then
-	vpid
+	env_conf
     else
 	$msger $eval "$MSG1";
 	exit 1
@@ -329,7 +317,19 @@ netto(){
 	fi
 }
 
+gtty(){
 case "$GTTY" in
     tty[0-8]) MSG0=$MSG0n; MSG1=$MSG1n; MSG2=$MSG2n; MSG3=$MSG3n && msger=echo; netto;;
     *) msger="notify-send -i info Radiocittaperta★it"; netto
 esac
+}
+
+PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
+    if [ ! -e /tmp/rca.pid ]; then
+	gtty
+    elif [ -e /tmp/rca.pid ]; then
+	if [ ! -d /proc/"$PIDP" ]; then
+	    rm -fr /tmp/rca.pid && $msger $eval "$MSG3"; else
+	    kill -9 "$PIDP" && rm -f /tmp/rca.pid /tmp/titles &>/dev/null
+	fi
+    fi
