@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #   radiocittaperta - bash script per l'ascolta di radiocittaperta.it
 #   Copyright (C) 2018  Felipe S. <felipesalva@tiscali.com>
@@ -259,9 +259,9 @@ PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
 IFS=
 read -r -a titla < <(tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2)
 
-while [ -d /proc/"$PIDP" ]
+ while [ -d /proc/"$PIDP" ]
 do
-    sleep 3 && titlf=`tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2`
+    sleep 3 && titlf="$(tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2)"
     if [ "$titla" != "$titlf" -a -n "$titlf" ]; then
 	notify-send -i info "Radiocittaperta★it:" "$titlf"; read -r -a titla < <(tail -n 2 /tmp/titles 2>/dev/null | grep -a icy-title | iconv -f ISO8859-1 -t UTF8 | cut -d ':' -f2)
     fi
@@ -277,7 +277,7 @@ env_conf(){
 
 wnchk(){
     wget -q --spider www.google.it
-    online=$?
+    online=$? 
     if [ "$online" -eq 0 ]; then
 	wnchk_strm
     else
@@ -317,16 +317,16 @@ netto(){
 	fi
 }
 
-gtty(){
+#gtty(){
 case "$GTTY" in
-    tty[0-8]) MSG0=$MSG0n; MSG1=$MSG1n; MSG2=$MSG2n; MSG3=$MSG3n && msger=echo; netto;;
-    *) msger="notify-send -i info Radiocittaperta★it"; netto
+    tty[0-8]) MSG0=$MSG0n; MSG1=$MSG1n; MSG2=$MSG2n; MSG3=$MSG3n && msger=echo;;
+    *) msger="notify-send -i info Radiocittaperta★it"
 esac
-}
+#}
 
 PIDP="$(cat /tmp/rca.pid 2>/dev/null)"
     if [ ! -e /tmp/rca.pid ]; then
-	gtty
+	netto
     elif [ -e /tmp/rca.pid ]; then
 	if [ ! -d /proc/"$PIDP" ]; then
 	    rm -fr /tmp/rca.pid && $msger $eval "$MSG3"; else
